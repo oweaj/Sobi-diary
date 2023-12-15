@@ -1,18 +1,15 @@
-import { useState } from 'react';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { FcGoogle } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
-  const [user, setUser] = useState<object | null>(null);
   const navigate = useNavigate();
 
   const handleGoogleLogin = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-      .then((data) => {
-        setUser(data.user);
+      .then(() => {
         navigate('/main');
       })
       .catch((error) => {
