@@ -1,8 +1,19 @@
 import { FiLogOut } from 'react-icons/fi';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-  const handleLogout = () => {
-    alert('로그아웃');
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/');
+      alert('로그아웃 되었습니다.');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
