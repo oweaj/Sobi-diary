@@ -4,7 +4,7 @@ import Main from './pages/Main/Main';
 
 function App() {
   return (
-    <div className="absolute w-[450px] h-full left-1/2 -translate-x-1/2 border border-gray-300 rounded-2xl shadow-xl bg-zinc-50">
+    <div className="fixed w-[450px] h-full left-1/2 -translate-x-1/2 border border-gray-300 rounded-2xl shadow-xl overflow-hidden">
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/main" element={<Main />} />
