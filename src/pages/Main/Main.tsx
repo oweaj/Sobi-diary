@@ -4,23 +4,27 @@ import MainContent from '../../components/Main/MainContent';
 import { useEffect, useState } from 'react';
 import { auth } from '../../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import { CiSquarePlus } from 'react-icons/ci';
+import MainModalCreate from '../../components/Main/MainModalCreate';
 
 const Main = () => {
   const [userName, setUserName] = useState<string | null>(null);
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserName(user.displayName);
-        console.log(user);
       }
     });
   }, []);
 
+  const handleCreate = () => setModal(!modal);
+
   return (
     <div>
       <Header />
-      <div className="flex flex-col gap-6 px-3 py-6">
+      <div className="flex flex-col px-3 py-6">
         <div className="flex flex-col gap-6 border-b border-gray-300">
           <div>
             <span className="text-lg">😎</span> 반갑습니다.
@@ -31,6 +35,14 @@ const Main = () => {
           <div>케러셀 예정</div>
         </div>
         <MainContent />
+        <button
+          type="button"
+          className="absolute left-1/2 -translate-x-1/2 bottom-3 text-gray-600 hover:text-green-500 transition-all"
+          onClick={handleCreate}
+        >
+          <CiSquarePlus className="w-12 h-12" />
+        </button>
+        {modal && <MainModalCreate setModal={setModal} />}
       </div>
     </div>
   );
