@@ -19,7 +19,7 @@ const Main = () => {
     });
   }, []);
 
-  const handleCreate = () => setModal(!modal);
+  const handleCreate = () => setModal(true);
 
   return (
     <div>
@@ -42,7 +42,7 @@ const Main = () => {
         >
           <CiSquarePlus className="w-12 h-12" />
         </button>
-        {modal && <MainModalCreate setModal={setModal} />}
+        {modal && <MainModalCreate open={modal} setModal={setModal} />}
       </div>
     </div>
   );

@@ -6,4 +6,16 @@
   .center {
     @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
   }
+  .modalUp {
+    @apply animate-[modal-up_500ms_ease-in-out];
+  }
+  .modalDown {
+    @apply animate-[modal-down_500ms_ease-in-out];
+  }
+  .modalInput {
+    @apply w-full border rounded-lg p-2;
+  }
+  .modalButton {
+    @apply w-full border rounded-lg py-2 hover:bg-indigo-500 hover:text-white;
+  }
 }

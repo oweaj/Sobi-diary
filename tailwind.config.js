@@ -5,12 +5,12 @@ export default {
     extend: {
       keyframes: {
         'modal-up': {
-          '0%': { transform: 'translateY(620px)' },
+          '0%': { transform: 'translateY(500px)' },
           '100%': { transform: 'translateY(0)' },
         },
         'modal-down': {
           '0%': { transform: 'translateY(0)' },
-          '100%': { transform: 'translateY(620px)' },
+          '100%': { transform: 'translateY(500px)' },
         },
       },
     },
