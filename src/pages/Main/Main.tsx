@@ -21,6 +21,8 @@ const Main = () => {
 
   const handleCreate = () => setModal(true);
 
+  console.log(modal);
+
   return (
     <div>
       <Header />
