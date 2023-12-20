@@ -21,32 +21,40 @@ const Main = () => {
 
   const handleCreate = () => setModal(true);
 
-  console.log(modal);
-
   return (
-    <div>
+    <>
       <Header />
-      <div className="flex flex-col px-3 py-6">
-        <div className="flex flex-col gap-6 border-b border-gray-300">
+      <div className="flex h-full flex-col gap-3 px-3 py-4">
+        <div className="flex flex-col gap-4 border-gray-300">
           <div>
             <span className="text-lg">😎</span> 반갑습니다.
             <span className="text-lg font-semibold text-sky-500"> {userName ? userName : '사용자'}</span>
             님 <br /> 한 달간 수입 및 지출 내역을 확인하세요.
           </div>
           <MainTotal />
-          <div>케러셀 예정</div>
+        </div>
+        <div className="flex gap-3 border-b border-gray-300 pb-3">
+          {['전체', '수입', '지출'].map((item) => (
+            <button
+              key={item}
+              type="button"
+              className="border border-gray-400 rounded-lg text-gray-500 py-1 px-2 hover:bg-gray-500 hover:text-white"
+            >
+              {item}
+            </button>
+          ))}
         </div>
         <MainContent />
-        <button
-          type="button"
-          className="absolute left-1/2 -translate-x-1/2 bottom-3 text-gray-600 hover:text-green-500 transition-all"
-          onClick={handleCreate}
-        >
-          <CiSquarePlus className="w-12 h-12" />
-        </button>
-        {modal && <MainModalCreate open={modal} setModal={setModal} />}
       </div>
-    </div>
+      <button
+        type="button"
+        className="absolute left-1/2 -translate-x-1/2 bottom-1 text-gray-600 hover:text-green-500 transition-all"
+        onClick={handleCreate}
+      >
+        <CiSquarePlus className="w-12 h-12" />
+      </button>
+      {modal && <MainModalCreate open={modal} setModal={setModal} />}
+    </>
   );
 };
 

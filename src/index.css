@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* input date 클릭 범위 조절 */
+input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 10px;
+  padding-left: 500px;
+  padding-right: 15px;
+  font-size: 22px;
+}
+
 @layer components {
   .center {
     @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
