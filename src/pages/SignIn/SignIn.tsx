@@ -18,7 +18,7 @@ const SignIn = () => {
 
   return (
     <div className="absolute center">
-      <img src="/logo.png" className="w-60 h-60 my-8 object-cover" alt="한달소비 로고 이미지" />
+      <img src="/logo.png" className="w-60 h-60 my-8 object-cover" alt="씀 로고 이미지" />
       <button
         className="w-full flex items-center justify-center gap-2 font-semibold border rounded-md shadow-md py-1"
         onClick={handleGoogleLogin}
