@@ -21,6 +21,9 @@ input::-webkit-calendar-picker-indicator {
   .modalDown {
     @apply animate-[modal-down_500ms_ease-in-out];
   }
+  .modalTypeName {
+    @apply px-1 font-semibold;
+  }
   .modalInput {
     @apply w-full border rounded-lg p-2;
   }
