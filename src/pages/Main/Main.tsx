@@ -5,21 +5,30 @@ import { useEffect, useState } from 'react';
 import { auth } from '../../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { CiSquarePlus } from 'react-icons/ci';
+import { BsTrash } from 'react-icons/bs';
 import MainModalCreate from '../../components/Main/MainModalCreate';
 
+interface userInfo {
+  id: string;
+  name: string | null;
+}
+
 const Main = () => {
-  const [userName, setUserName] = useState<string | null>(null);
+  const [user, setUser] = useState<userInfo | null>(null);
   const [modal, setModal] = useState(false);
+  const [deleteMode, setDeleteMode] = useState(false);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUserName(user.displayName);
+        setUser({ id: user.uid, name: user.displayName });
       }
     });
   }, []);
 
   const handleCreate = () => setModal(true);
+
+  const handleDelete = () => setDeleteMode(!deleteMode);
 
   return (
     <>
@@ -28,12 +37,12 @@ const Main = () => {
         <div className="flex flex-col gap-4 border-gray-300">
           <div>
             <span className="text-lg">😎</span> 반갑습니다.
-            <span className="text-lg font-semibold text-sky-500"> {userName ? userName : '사용자'}</span>
+            <span className="text-lg font-semibold text-sky-500"> {user?.name ? user.name : '사용자'}</span>
             님 <br /> 한 달간 수입 및 지출 내역을 확인하세요.
           </div>
           <MainTotal />
         </div>
-        <div className="flex gap-3 border-b border-gray-300 pb-3">
+        <div className="flex items-center gap-3 border-b border-gray-300 pb-3">
           {['전체', '수입', '지출'].map((item) => (
             <button
               key={item}
@@ -43,8 +52,11 @@ const Main = () => {
               {item}
             </button>
           ))}
+          <button type="button" className="absolute right-4 p-1" onClick={handleDelete}>
+            <BsTrash className="w-6 h-6 text-gray-700" />
+          </button>
         </div>
-        <MainContent />
+        <MainContent userId={user?.id} deleteMode={deleteMode} />
       </div>
       <button
         type="button"
@@ -53,7 +65,7 @@ const Main = () => {
       >
         <CiSquarePlus className="w-12 h-12" />
       </button>
-      {modal && <MainModalCreate open={modal} setModal={setModal} />}
+      {modal && <MainModalCreate setModal={setModal} userId={user?.id} />}
     </>
   );
 };

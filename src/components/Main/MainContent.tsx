@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import { db } from '../../firebase';
-import { collection, getDocs, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { MdOutlineContentPasteSearch } from 'react-icons/md';
+
+interface userIdType {
+  userId: string | undefined;
+  deleteMode: boolean;
+}
 
 interface docType {
   date: string;
@@ -11,15 +16,22 @@ interface docType {
   id: string;
 }
 
-const MainContent = () => {
+const MainContent = ({ userId, deleteMode }: userIdType) => {
   const [docList, setDocList] = useState<docType[]>([]);
 
   // 추가 입력 후 저장된 데이터 가져오기
-  const queryCheck = query(collection(db, 'product'), orderBy('date', 'desc'));
-  onSnapshot(queryCheck, (snapShot) => {
-    const productArr = snapShot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as docType));
-    setDocList(productArr);
-  });
+  useEffect(() => {
+    const queryCheck = query(collection(db, `user/${userId}/user-diary`), orderBy('date', 'desc'));
+    onSnapshot(queryCheck, (snapShot) => {
+      const productArr = snapShot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as docType));
+      setDocList(productArr);
+    });
+  }, [userId]);
+
+  // 체크가 된 내역
+  const handleCheck = (id: string) => {
+    console.log(id);
+  };
 
   return (
     <div className="h-[calc(100%-25rem)]">
@@ -28,15 +40,19 @@ const MainContent = () => {
           {docList.map(({ id, date, type, content, price }) => (
             <li
               key={id}
-              className="flex items-center justify-between border border-gray-300 rounded-lg py-2 px-4 bg-gray-50"
+              className="flex items-center justify-between py-2 px-5 border rounded-lg border-gray-300 bg-gray-50"
             >
               <p className="flex flex-col">
-                <span className="text-gray-400">{date}</span>
+                <span className="text-gray-400">{date.substring(0, 10)}</span>
                 <span>{content}</span>
               </p>
-              <p className={`${type === '수입' ? 'text-sky-500' : 'text-red-400'}`}>{`${
-                type === '수입' ? '+' : '-'
-              }${price.toLocaleString()}원`}</p>
+              <div className="flex items-center gap-3">
+                <p className={type === '수입' ? 'text-sky-500' : 'text-red-400'}>
+                  {type === '수입' ? '+' : '-'}
+                  {Number(price).toLocaleString()}원
+                </p>
+                {deleteMode && <input type="checkbox" className="w-4 h-4" onClick={() => handleCheck(id)} />}
+              </div>
             </li>
           ))}
         </ul>
