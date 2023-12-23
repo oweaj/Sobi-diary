@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { auth } from '../../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { CiSquarePlus } from 'react-icons/ci';
-import { BsTrash } from 'react-icons/bs';
 import MainModalCreate from '../../components/Main/MainModalCreate';
 
 interface userInfo {
@@ -24,9 +23,16 @@ const Main = () => {
         setUser({ id: user.uid, name: user.displayName });
       }
     });
-  }, []);
+  }, [user?.id]);
 
-  const handleCreate = () => setModal(true);
+  const handleModalShow = () => {
+    setModal(true);
+    setDeleteMode(false);
+  };
+
+  const handleFilter = () => {
+    console.log('필터');
+  };
 
   const handleDelete = () => setDeleteMode(!deleteMode);
 
@@ -34,7 +40,7 @@ const Main = () => {
     <>
       <Header />
       <div className="flex h-full flex-col gap-3 px-3 py-4">
-        <div className="flex flex-col gap-4 border-gray-300">
+        <div className="flex flex-col gap-4">
           <div>
             <span className="text-lg">😎</span> 반갑습니다.
             <span className="text-lg font-semibold text-sky-500"> {user?.name ? user.name : '사용자'}</span>
@@ -42,26 +48,26 @@ const Main = () => {
           </div>
           <MainTotal />
         </div>
-        <div className="flex items-center gap-3 border-b border-gray-300 pb-3">
-          {['전체', '수입', '지출'].map((item) => (
+        <div className="flex items-center gap-3 border-b border-gray-400 pb-3">
+          {['전체', '수입', '지출', '삭제'].map((item) => (
             <button
               key={item}
+              id={item}
               type="button"
-              className="border border-gray-400 rounded-lg text-gray-500 py-1 px-2 hover:bg-gray-500 hover:text-white"
+              className={`filterButton 
+              ${item === '삭제' && `absolute right-4 ${deleteMode && 'bg-gray-500 text-white'}`}`}
+              onClick={item === '삭제' ? handleDelete : handleFilter}
             >
               {item}
             </button>
           ))}
-          <button type="button" className="absolute right-4 p-1" onClick={handleDelete}>
-            <BsTrash className="w-6 h-6 text-gray-700" />
-          </button>
         </div>
-        <MainContent userId={user?.id} deleteMode={deleteMode} />
+        <MainContent userId={user?.id} deleteMode={deleteMode} setDeleteMode={setDeleteMode} />
       </div>
       <button
         type="button"
         className="absolute left-1/2 -translate-x-1/2 bottom-1 text-gray-800 hover:text-green-500 transition-all"
-        onClick={handleCreate}
+        onClick={handleModalShow}
       >
         <CiSquarePlus className="w-12 h-12" />
       </button>

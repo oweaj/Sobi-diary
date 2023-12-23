@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { db } from '../../firebase';
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { MdOutlineContentPasteSearch } from 'react-icons/md';
+import { BsTrash } from 'react-icons/bs';
+import useReduce from '../../hook/useReduce';
 
 interface userIdType {
   userId: string | undefined;
   deleteMode: boolean;
+  setDeleteMode: Dispatch<SetStateAction<boolean>>;
 }
 
 interface docType {
@@ -16,43 +19,58 @@ interface docType {
   id: string;
 }
 
-const MainContent = ({ userId, deleteMode }: userIdType) => {
+const MainContent = ({ userId, deleteMode, setDeleteMode }: userIdType) => {
   const [docList, setDocList] = useState<docType[]>([]);
+  const userDiary = `user/${userId}/user-diary`;
 
   // 추가 입력 후 저장된 데이터 가져오기
   useEffect(() => {
-    const queryCheck = query(collection(db, `user/${userId}/user-diary`), orderBy('date', 'desc'));
+    const queryCheck = query(collection(db, userDiary), orderBy('date', 'desc'));
     onSnapshot(queryCheck, (snapShot) => {
       const productArr = snapShot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as docType));
       setDocList(productArr);
     });
   }, [userId]);
 
-  // 체크가 된 내역
+  // const { calc } = useReduce(docList, '수입');
+
+  // 데이터 삭제 하기
   const handleCheck = (id: string) => {
-    console.log(id);
+    const deleteCall = window.confirm('내역을 삭제하시겠습니까?');
+    if (deleteCall) {
+      deleteDoc(doc(db, userDiary, id));
+      setDeleteMode(false);
+    }
   };
 
   return (
     <div className="h-[calc(100%-25rem)]">
       {docList.length ? (
-        <ul className="h-full flex flex-col gap-3 overflow-y-auto">
+        <ul className="h-full flex flex-col gap-3 overflow-y-auto overflow-x-hidden">
           {docList.map(({ id, date, type, content, price }) => (
             <li
               key={id}
-              className="flex items-center justify-between py-2 px-5 border rounded-lg border-gray-300 bg-gray-50"
+              className="relative flex items-center justify-between py-2 px-5 border rounded-lg border-gray-300 bg-gray-50"
             >
-              <p className="flex flex-col">
+              <div className="flex flex-col">
                 <span className="text-gray-400">{date.substring(0, 10)}</span>
                 <span>{content}</span>
-              </p>
-              <div className="flex items-center gap-3">
-                <p className={type === '수입' ? 'text-sky-500' : 'text-red-400'}>
-                  {type === '수입' ? '+' : '-'}
-                  {Number(price).toLocaleString()}원
-                </p>
-                {deleteMode && <input type="checkbox" className="w-4 h-4" onClick={() => handleCheck(id)} />}
               </div>
+              <span
+                className={`${type === '수입' ? 'text-sky-500' : 'text-red-400'} ${
+                  deleteMode ? 'mr-5' : 'mr-0'
+                } transition-all duration-200`}
+              >
+                {type === '수입' ? '+' : '-'}
+                {Number(price).toLocaleString()}원
+              </span>
+              <button
+                type="button"
+                className={`absolute ${deleteMode ? 'right-2' : '-right-5'} transition-all duration-200`}
+                onClick={() => handleCheck(id)}
+              >
+                <BsTrash className="w-5 h-5" />
+              </button>
             </li>
           ))}
         </ul>

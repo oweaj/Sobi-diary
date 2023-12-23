@@ -35,7 +35,7 @@ const MainModalCreate = ({ setModal, userId }: modalState) => {
         content: content.data,
         price: price.data,
       });
-      alert('완료');
+      alert('내역이 추가되었습니다.');
       setModal(false);
     } else {
       alert('해당 내용을 알맞게 입력해 주세요.');

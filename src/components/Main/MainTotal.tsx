@@ -1,6 +1,6 @@
 const MainTotal = () => {
   return (
-    <div className="text-center border border-gray-300 rounded-xl py-6 bg-white">
+    <div className="text-center border border-gray-400 rounded-xl py-6 bg-white">
       <div className="text-2xl font-medium pb-6">100,000,000원</div>
       <div className="flex items-center justify-evenly">
         <div className="flex-grow border-r border-gray-400">

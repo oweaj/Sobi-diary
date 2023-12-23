@@ -32,4 +32,7 @@ input::-webkit-calendar-picker-indicator {
   .modalButton {
     @apply w-full border rounded-lg py-2 hover:bg-indigo-500 hover:text-white;
   }
+  .filterButton {
+    @apply border border-gray-400 rounded-lg text-gray-500 py-1 px-2 hover:bg-gray-500 hover:text-white;
+  }
 }
