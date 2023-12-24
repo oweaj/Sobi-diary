@@ -34,6 +34,8 @@ const MainContent = ({ userId, deleteMode, setDeleteMode }: userIdType) => {
 
   // const { calc } = useReduce(docList, '수입');
 
+  // console.log(calc);
+
   // 데이터 삭제 하기
   const handleCheck = (id: string) => {
     const deleteCall = window.confirm('내역을 삭제하시겠습니까?');
