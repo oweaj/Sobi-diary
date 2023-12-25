@@ -1,9 +1,9 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { db } from '../../firebase';
-import { collection, deleteDoc, doc, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { deleteDoc, doc } from 'firebase/firestore';
 import { MdOutlineContentPasteSearch } from 'react-icons/md';
 import { BsTrash } from 'react-icons/bs';
-import useReduce from '../../hook/useReduce';
+import useGetDoc from '../../hooks/useGetDoc';
 
 interface userIdType {
   userId: string | undefined;
@@ -11,33 +11,13 @@ interface userIdType {
   setDeleteMode: Dispatch<SetStateAction<boolean>>;
 }
 
-interface docType {
-  date: string;
-  type: string;
-  content: string;
-  price: number;
-  id: string;
-}
-
 const MainContent = ({ userId, deleteMode, setDeleteMode }: userIdType) => {
-  const [docList, setDocList] = useState<docType[]>([]);
-  const userDiary = `user/${userId}/user-diary`;
-
-  // 추가 입력 후 저장된 데이터 가져오기
-  useEffect(() => {
-    const queryCheck = query(collection(db, userDiary), orderBy('date', 'desc'));
-    onSnapshot(queryCheck, (snapShot) => {
-      const productArr = snapShot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as docType));
-      setDocList(productArr);
-    });
-  }, [userId]);
-
-  // const { calc } = useReduce(docList, '수입');
-  // console.log(calc);
+  const { docList } = useGetDoc(userId); // 현재 사용자 데이터 가져오기
 
   // 데이터 삭제 하기
   const handleCheck = (id: string) => {
     const deleteCall = window.confirm('내역을 삭제하시겠습니까?');
+    const userDiary = `user/${userId}/user-diary`;
     if (deleteCall) {
       deleteDoc(doc(db, userDiary, id));
       setDeleteMode(false);

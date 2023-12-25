@@ -46,7 +46,7 @@ const Main = () => {
             <span className="text-lg font-semibold text-sky-500"> {user?.name ? user.name : '사용자'}</span>
             님 <br /> 한 달간 수입 및 지출 내역을 확인하세요.
           </div>
-          <MainTotal />
+          <MainTotal userId={user?.id} />
         </div>
         <div className="flex items-center gap-3 border-b border-gray-400 pb-3">
           {['전체', '수입', '지출', '삭제'].map((item) => (

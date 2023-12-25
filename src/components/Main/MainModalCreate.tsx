@@ -1,7 +1,7 @@
 import { MouseEvent, Dispatch, SetStateAction, useState } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../firebase';
-import useInput from '../../hook/useInput';
+import useInput from '../../hooks/useInput';
 
 interface modalState {
   setModal: Dispatch<SetStateAction<boolean>>;
