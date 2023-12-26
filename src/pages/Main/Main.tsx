@@ -16,6 +16,7 @@ const Main = () => {
   const [user, setUser] = useState<userInfo | null>(null);
   const [modal, setModal] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
+  const [btnId, setBtnId] = useState('전체');
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -30,10 +31,6 @@ const Main = () => {
     setDeleteMode(false);
   };
 
-  const handleFilter = () => {
-    console.log('필터');
-  };
-
   const handleDelete = () => setDeleteMode(!deleteMode);
 
   return (
@@ -44,7 +41,7 @@ const Main = () => {
           <div>
             <span className="text-lg">😎</span> 반갑습니다.
             <span className="text-lg font-semibold text-sky-500"> {user?.name ? user.name : '사용자'}</span>
-            님 <br /> 한 달간 수입 및 지출 내역을 확인하세요.
+            님 <br /> 수입 및 지출 내역을 확인해보세요.
           </div>
           <MainTotal userId={user?.id} />
         </div>
@@ -52,17 +49,16 @@ const Main = () => {
           {['전체', '수입', '지출', '삭제'].map((item) => (
             <button
               key={item}
-              id={item}
               type="button"
-              className={`filterButton 
+              className={`filterButton ${item === btnId && 'bg-gray-500 text-white'}
               ${item === '삭제' && `absolute right-4 ${deleteMode && 'bg-gray-500 text-white'}`}`}
-              onClick={item === '삭제' ? handleDelete : handleFilter}
+              onClick={item === '삭제' ? handleDelete : () => setBtnId(item)}
             >
               {item}
             </button>
           ))}
         </div>
-        <MainContent userId={user?.id} deleteMode={deleteMode} setDeleteMode={setDeleteMode} />
+        <MainContent userId={user?.id} deleteMode={deleteMode} setDeleteMode={setDeleteMode} btnId={btnId} />
       </div>
       <button
         type="button"

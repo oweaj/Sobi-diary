@@ -9,16 +9,17 @@ interface userIdType {
   userId: string | undefined;
   deleteMode: boolean;
   setDeleteMode: Dispatch<SetStateAction<boolean>>;
+  btnId: string | null;
 }
 
-const MainContent = ({ userId, deleteMode, setDeleteMode }: userIdType) => {
-  const { docList } = useGetDoc(userId); // 현재 사용자 데이터 가져오기
+const MainContent = ({ userId, deleteMode, setDeleteMode, btnId }: userIdType) => {
+  const { docList } = useGetDoc(userId, btnId); // 현재 사용자 데이터 가져오기
 
   // 데이터 삭제 하기
   const handleCheck = (id: string) => {
-    const deleteCall = window.confirm('내역을 삭제하시겠습니까?');
+    const deleteCheck = window.confirm('내역을 삭제하시겠습니까?');
     const userDiary = `user/${userId}/user-diary`;
-    if (deleteCall) {
+    if (deleteCheck) {
       deleteDoc(doc(db, userDiary, id));
       setDeleteMode(false);
     }
@@ -38,12 +39,11 @@ const MainContent = ({ userId, deleteMode, setDeleteMode }: userIdType) => {
                 <span>{content}</span>
               </div>
               <span
-                className={`${type === '수입' ? 'text-sky-500' : 'text-red-400'} ${
-                  deleteMode ? 'mr-5' : 'mr-0'
-                } transition-all duration-200`}
+                className={`${type === '수입' ? 'text-sky-500' : 'text-red-400'} 
+                ${deleteMode ? 'mr-5' : 'mr-0'} transition-all duration-200`}
               >
                 {type === '수입' ? '+' : '-'}
-                {Number(price).toLocaleString()}원
+                {price}원
               </span>
               <button
                 type="button"
