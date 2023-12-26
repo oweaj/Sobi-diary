@@ -10,10 +10,9 @@ interface modalState {
 
 const MainModalCreate = ({ setModal, userId }: modalState) => {
   const [type, setType] = useState<string | null>(null);
-  const addDate = new Date().toISOString();
-  const date = useInput();
-  const content = useInput();
-  const price = useInput();
+  const date = useInput('date');
+  const content = useInput('content');
+  const price = useInput('price');
 
   const handleType = (e: MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;
@@ -30,7 +29,7 @@ const MainModalCreate = ({ setModal, userId }: modalState) => {
     e.preventDefault();
     if (type && content.data && price.data) {
       await addDoc(collection(db, `user/${userId}/user-diary`), {
-        date: addDate,
+        date: date.date,
         type: type,
         content: content.data,
         price: price.data,
@@ -46,12 +45,16 @@ const MainModalCreate = ({ setModal, userId }: modalState) => {
     <div className="absolute inset-0 bg-black bg-opacity-30">
       <div className={`absolute left-0 bottom-0 w-full h-3/5 p-4 rounded-lg bg-white modalUp`}>
         <form className="flex flex-col gap-6">
-          <div className="">
-            <h3 className="modalTypeName">날짜</h3>
+          <div>
+            <label htmlFor="date" className="modalTypeName">
+              날짜
+            </label>
             <input type="date" id="date" className="relative modalInput mt-1 text-lg" onChange={date.onChange} />
           </div>
           <div className="flex flex-col">
-            <h3 className="modalTypeName">내용</h3>
+            <label htmlFor="content" className="modalTypeName">
+              내용
+            </label>
             <div className="flex gap-4 mt-1 mb-3">
               {['수입', '지출'].map((item) => (
                 <button
@@ -74,13 +77,17 @@ const MainModalCreate = ({ setModal, userId }: modalState) => {
             />
           </div>
           <div>
-            <h3 className="modalTypeName">금액</h3>
+            <label htmlFor="price" className="modalTypeName">
+              금액
+            </label>
             <input
-              type="number"
+              type="text"
               id="price"
               className="modalInput mt-1"
-              placeholder="금액을 적어주세요.(숫자만 가능)"
+              placeholder="금액을 적어주세요.(숫자만 최대 8자)"
               onChange={price.onChange}
+              value={price.data}
+              maxLength={10}
               required
             />
           </div>
