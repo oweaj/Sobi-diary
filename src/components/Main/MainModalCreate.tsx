@@ -90,9 +90,12 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
             />
           </div>
           <div>
-            <label htmlFor="price" className="modalTypeName">
-              금액
-            </label>
+            <div className="flex items-end">
+              <label htmlFor="price" className="modalTypeName">
+                금액
+              </label>
+              <p className="text-[12px] text-red-400">(8자 이하 숫자만 가능)</p>
+            </div>
             <input
               type="text"
               id="price"
