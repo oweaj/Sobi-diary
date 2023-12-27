@@ -36,15 +36,13 @@ const Main = () => {
   return (
     <>
       <Header />
-      <div className="flex h-full flex-col gap-3 px-3 py-4">
-        <div className="flex flex-col gap-4">
-          <div>
-            <span className="text-lg">😎</span> 반갑습니다.
-            <span className="text-lg font-semibold text-sky-500"> {user?.name ? user.name : '사용자'}</span>
-            님 <br /> 수입 및 지출 내역을 확인해보세요.
-          </div>
-          <MainTotal userId={user?.id} />
+      <div className="flex h-full flex-col gap-3 px-3">
+        <div className="pt-3">
+          <span className="text-lg">😎</span> 반갑습니다.
+          <span className="text-lg font-semibold text-sky-500"> {user?.name ? user.name : '사용자'}</span>
+          님 <br /> 수입 및 지출 내역을 확인해보세요.
         </div>
+        <MainTotal userId={user?.id} />
         <div className="flex items-center gap-3 border-b border-gray-400 pb-3">
           {['전체', '수입', '지출', '삭제'].map((item) => (
             <button
@@ -60,13 +58,11 @@ const Main = () => {
         </div>
         <MainContent userId={user?.id} deleteMode={deleteMode} setDeleteMode={setDeleteMode} btnId={btnId} />
       </div>
-      <button
-        type="button"
-        className="absolute left-1/2 -translate-x-1/2 bottom-1 text-gray-800 hover:text-green-500 transition-all"
-        onClick={handleModalOpen}
-      >
-        <CiSquarePlus className="w-12 h-12" />
-      </button>
+      <div className="flex absolute left-1/2 -translate-x-1/2 bottom-0">
+        <button type="button" className="text-gray-800 hover:text-green-500 transition-all" onClick={handleModalOpen}>
+          <CiSquarePlus className="w-12 h-12" />
+        </button>
+      </div>
       <MainModalCreate modal={modal} setModal={setModal} userId={user?.id} />
     </>
   );

@@ -30,10 +30,7 @@ const MainContent = ({ userId, deleteMode, setDeleteMode, btnId }: userIdType) =
       {docList.length ? (
         <ul className="h-full flex flex-col gap-3 overflow-y-auto overflow-x-hidden">
           {docList.map(({ id, date, type, content, price }) => (
-            <li
-              key={id}
-              className="relative flex items-center justify-between py-2 px-5 border rounded-lg border-gray-300 bg-gray-50"
-            >
+            <li key={id} className="contentList">
               <div className="flex flex-col">
                 <span className="text-gray-400">{date.substring(0, 10)}</span>
                 <span>{content}</span>

@@ -8,8 +8,8 @@ const MainTotal = ({ userId }: userType) => {
   const minusTotal = useGetDoc(userId, '지출').handleTotal();
 
   return (
-    <div className="text-center border border-gray-400 rounded-xl py-6 bg-white">
-      <div className="text-xl font-medium pb-6">
+    <div className="text-center border border-gray-400 rounded-xl py-4 bg-white">
+      <div className="text-xl font-medium pb-5">
         총 <span className="text-2xl font-semibold">{(plusTotal + -minusTotal).toLocaleString()}</span>원
       </div>
       <div className="flex items-center justify-evenly">
