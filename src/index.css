@@ -17,11 +17,8 @@ input::-webkit-calendar-picker-indicator {
   .center {
     @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
   }
-  .modalUp {
-    @apply animate-[modal-up_500ms_ease-in-out];
-  }
-  .modalDown {
-    @apply animate-[modal-down_500ms_ease-in-out];
+  .modalStyle {
+    @apply absolute left-0 -bottom-[500px] w-full h-3/5 p-4 rounded-lg bg-white transition-all duration-500 ease-in-out;
   }
   .modalTypeName {
     @apply px-1 font-semibold;

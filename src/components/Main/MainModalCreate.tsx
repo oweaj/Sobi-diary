@@ -1,26 +1,32 @@
 import { MouseEvent, Dispatch, SetStateAction, useState } from 'react';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase';
 import useInput from '../../hooks/useInput';
 
 interface modalState {
+  modal: boolean;
   setModal: Dispatch<SetStateAction<boolean>>;
   userId: string | undefined;
 }
 
-const MainModalCreate = ({ setModal, userId }: modalState) => {
+const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
   const [type, setType] = useState<string | null>(null);
-  const date = useInput('date');
-  const content = useInput('content');
-  const price = useInput('price');
+  const today = new Date();
+  const currentTime = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+  const date = useInput();
+  const content = useInput();
+  const price = useInput();
 
   const handleType = (e: MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;
     setType(target.textContent);
   };
 
-  // 모달 닫는 애니메이션 수정하기
   const handleModalClose = () => {
+    setType(null);
+    date.onReset();
+    content.onReset();
+    price.onReset();
     setModal(false);
   };
 
@@ -29,27 +35,34 @@ const MainModalCreate = ({ setModal, userId }: modalState) => {
     e.preventDefault();
     if (type && content.data && price.data) {
       await addDoc(collection(db, `user/${userId}/user-diary`), {
-        date: date.date,
+        date: `${date.data} ${currentTime}`,
         type: type,
         content: content.data,
         price: price.data,
       });
       alert('내역이 추가되었습니다.');
-      setModal(false);
+      handleModalClose();
     } else {
       alert('해당 내용을 알맞게 입력해 주세요.');
     }
   };
 
   return (
-    <div className="absolute inset-0 bg-black bg-opacity-30">
-      <div className={`absolute left-0 bottom-0 w-full h-3/5 p-4 rounded-lg bg-white modalUp`}>
+    <>
+      {modal && <div className="absolute inset-0 bg-black bg-opacity-30"></div>}
+      <div className={`modalStyle ${modal && 'bottom-0'} `}>
         <form className="flex flex-col gap-6">
           <div>
             <label htmlFor="date" className="modalTypeName">
               날짜
             </label>
-            <input type="date" id="date" className="relative modalInput mt-1 text-lg" onChange={date.onChange} />
+            <input
+              type="date"
+              id="date"
+              className="relative modalInput mt-1 text-lg"
+              value={date.data}
+              onChange={(e) => date.onChange(e, 'date')}
+            />
           </div>
           <div className="flex flex-col">
             <label htmlFor="content" className="modalTypeName">
@@ -57,11 +70,7 @@ const MainModalCreate = ({ setModal, userId }: modalState) => {
             </label>
             <div className="flex gap-4 mt-1 mb-3">
               {['수입', '지출'].map((item) => (
-                <button
-                  key={item}
-                  className={`modalButton ${item === type && 'bg-indigo-500 text-white'}`}
-                  onClick={handleType}
-                >
+                <button key={item} className={`modalButton ${item === type && 'bg-indigo-500 text-white'}`} onClick={handleType}>
                   {item}
                 </button>
               ))}
@@ -72,7 +81,8 @@ const MainModalCreate = ({ setModal, userId }: modalState) => {
               className="modalInput"
               placeholder="내용을 적어주세요.(최대 12자)"
               maxLength={12}
-              onChange={content.onChange}
+              value={content.data}
+              onChange={(e) => content.onChange(e, 'content')}
               required
             />
           </div>
@@ -85,7 +95,7 @@ const MainModalCreate = ({ setModal, userId }: modalState) => {
               id="price"
               className="modalInput mt-1"
               placeholder="금액을 적어주세요.(숫자만 최대 8자)"
-              onChange={price.onChange}
+              onChange={(e) => price.onChange(e, 'price')}
               value={price.data}
               maxLength={10}
               required
@@ -105,7 +115,7 @@ const MainModalCreate = ({ setModal, userId }: modalState) => {
           </div>
         </form>
       </div>
-    </div>
+    </>
   );
 };
 
