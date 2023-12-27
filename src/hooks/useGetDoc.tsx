@@ -10,7 +10,7 @@ interface docType {
   id: string;
 }
 
-const useReduce = (userId: string | undefined, type: string | null) => {
+const useGetDoc = (userId: string | undefined, type: string | null) => {
   const [docList, setDocList] = useState<docType[]>([]);
 
   useEffect(() => {
@@ -45,4 +45,4 @@ const useReduce = (userId: string | undefined, type: string | null) => {
   return { docList, handleTotal };
 };
 
-export default useReduce;
+export default useGetDoc;
