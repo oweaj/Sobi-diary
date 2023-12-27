@@ -1,5 +1,5 @@
 import { MouseEvent, Dispatch, SetStateAction, useState } from 'react';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../firebase';
 import useInput from '../../hooks/useInput';
 
@@ -22,18 +22,21 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
     setType(target.textContent);
   };
 
+  // 모달 닫을때 data가 있으면 초기화
   const handleModalClose = () => {
-    setType(null);
-    date.onReset();
-    content.onReset();
-    price.onReset();
+    if (type || date.data || content.data || price.data) {
+      setType(null);
+      date.onReset();
+      content.onReset();
+      price.onReset();
+    }
     setModal(false);
   };
 
   // 추가 시 사용자별 입력한 데이터를 저장
   const handleContentAdd = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (type && content.data && price.data) {
+    if (type && date.data && content.data && price.data) {
       await addDoc(collection(db, `user/${userId}/user-diary`), {
         date: `${date.data} ${currentTime}`,
         type: type,
@@ -48,7 +51,7 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
   };
 
   return (
-    <>
+    <div>
       {modal && <div className="absolute inset-0 bg-black bg-opacity-30"></div>}
       <div className={`modalStyle ${modal && 'bottom-0'} `}>
         <form className="flex flex-col gap-6">
@@ -94,7 +97,7 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
               type="text"
               id="price"
               className="modalInput mt-1"
-              placeholder="금액을 적어주세요.(숫자만 최대 8자)"
+              placeholder="금액을 적어주세요.(최대 숫자만 8자)"
               onChange={(e) => price.onChange(e, 'price')}
               value={price.data}
               maxLength={10}
@@ -115,7 +118,7 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 
