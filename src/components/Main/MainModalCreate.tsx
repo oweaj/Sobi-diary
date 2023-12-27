@@ -100,7 +100,7 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
               type="text"
               id="price"
               className="modalInput mt-1"
-              placeholder="금액을 적어주세요.(최대 숫자만 8자)"
+              placeholder="금액을 적어주세요."
               onChange={(e) => price.onChange(e, 'price')}
               value={price.data}
               maxLength={10}
