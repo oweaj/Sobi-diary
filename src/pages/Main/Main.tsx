@@ -26,7 +26,7 @@ const Main = () => {
     });
   }, [user?.id]);
 
-  const handleModalShow = () => {
+  const handleModalOpen = () => {
     setModal(true);
     setDeleteMode(false);
   };
@@ -63,11 +63,11 @@ const Main = () => {
       <button
         type="button"
         className="absolute left-1/2 -translate-x-1/2 bottom-1 text-gray-800 hover:text-green-500 transition-all"
-        onClick={handleModalShow}
+        onClick={handleModalOpen}
       >
         <CiSquarePlus className="w-12 h-12" />
       </button>
-      {modal && <MainModalCreate setModal={setModal} userId={user?.id} />}
+      <MainModalCreate modal={modal} setModal={setModal} userId={user?.id} />
     </>
   );
 };
