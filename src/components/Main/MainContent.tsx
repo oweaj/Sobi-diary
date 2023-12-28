@@ -32,7 +32,7 @@ const MainContent = ({ userId, deleteMode, setDeleteMode, btnId }: userIdType) =
           {docList.map(({ id, date, type, content, price }) => (
             <li key={id} className="contentList">
               <div className="flex flex-col">
-                <span className="text-gray-400">{date.substring(0, 10)}</span>
+                <span className="text-gray-400">{date.slice(0, 11)}</span>
                 <span>{content}</span>
               </div>
               <span
