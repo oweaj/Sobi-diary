@@ -73,7 +73,12 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
             </label>
             <div className="flex gap-4 mt-1 mb-3">
               {['수입', '지출'].map((item) => (
-                <button key={item} className={`modalButton ${item === type && 'bg-indigo-500 text-white'}`} onClick={handleType}>
+                <button
+                  key={item}
+                  type="button"
+                  className={`modalButton ${item === type && 'bg-indigo-500 text-white'}`}
+                  onClick={handleType}
+                >
                   {item}
                 </button>
               ))}
@@ -101,8 +106,8 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
               id="price"
               className="modalInput mt-1"
               placeholder="금액을 적어주세요."
-              onChange={(e) => price.onChange(e, 'price')}
               value={price.data}
+              onChange={(e) => price.onChange(e, 'price')}
               maxLength={10}
               required
             />
