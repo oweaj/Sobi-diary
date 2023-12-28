@@ -1,30 +1,24 @@
 import Header from '../../components/Header/Header';
 import MainTotal from '../../components/Main/MainTotal';
 import MainContent from '../../components/Main/MainContent';
-import { useEffect, useState } from 'react';
-import { auth } from '../../firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { CiSquarePlus } from 'react-icons/ci';
 import MainModalCreate from '../../components/Main/MainModalCreate';
+import { FaRegChartBar } from 'react-icons/fa';
 
-interface userInfo {
-  id: string;
-  name: string | null;
+interface userType {
+  user: {
+    id: string;
+    name: string | null;
+  } | null;
 }
 
-const Main = () => {
-  const [user, setUser] = useState<userInfo | null>(null);
+const Main = ({ user }: userType) => {
+  // const [user, setUser] = useState<userInfo | null>(null);
   const [modal, setModal] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
   const [btnId, setBtnId] = useState('전체');
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser({ id: user.uid, name: user.displayName });
-      }
-    });
-  }, [user?.id]);
 
   const handleModalOpen = () => {
     setModal(true);
@@ -37,10 +31,18 @@ const Main = () => {
     <>
       <Header />
       <div className="flex h-full flex-col gap-3 px-3">
-        <div className="pt-3">
-          <span className="text-lg">😎</span> 반갑습니다.
-          <span className="text-lg font-semibold text-sky-500"> {user?.name ? user.name : '사용자'}</span>
-          님 <br /> 수입 및 지출 내역을 확인해보세요.
+        <div className="flex items-center justify-between pt-3">
+          <div>
+            <span className="text-lg">😎</span> 반갑습니다.
+            <span className="text-lg font-semibold text-sky-500"> {user?.name ? user.name : '사용자'}</span>
+            님 <br /> 수입 및 지출 내역을 확인해보세요.
+          </div>
+          <div>
+            <Link to="/chart" className="flex items-center gap-1 mainButton">
+              <FaRegChartBar />
+              <span>소비 차트</span>
+            </Link>
+          </div>
         </div>
         <MainTotal userId={user?.id} />
         <div className="flex items-center gap-3 border-b border-gray-400 pb-3">
@@ -48,7 +50,7 @@ const Main = () => {
             <button
               key={item}
               type="button"
-              className={`filterButton ${item === btnId && 'bg-gray-500 text-white'}
+              className={`mainButton ${item === btnId && 'bg-gray-500 text-white'}
               ${item === '삭제' && `absolute right-4 ${deleteMode && 'bg-gray-500 text-white'}`}`}
               onClick={item === '삭제' ? handleDelete : () => setBtnId(item)}
             >
