@@ -11,6 +11,9 @@ interface modalState {
 
 const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
   const [type, setType] = useState<string | null>(null);
+  const [detailMode, setDetailMode] = useState(false);
+  const [detailType, setDetailType] = useState<string | null>(null);
+  const [showInput, setShowInput] = useState(false);
   const today = new Date();
   const currentTime = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
   const date = useInput();
@@ -19,30 +22,53 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
 
   const handleType = (e: MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;
+    target.textContent === '지출' ? setDetailMode(true) : setDetailMode(false);
     setType(target.textContent);
+  };
+
+  const handleDetail = (e: MouseEvent<HTMLButtonElement>) => {
+    const target = e.target as HTMLButtonElement;
+    target.textContent === '기타' ? setShowInput(true) : setShowInput(false);
+    setDetailType(target.textContent);
   };
 
   // 모달 닫을때 data가 있으면 초기화
   const handleModalClose = () => {
-    if (type || date.data || content.data || price.data) {
+    if (type || detailType || date.data || content.data || price.data) {
       setType(null);
+      setDetailType(null);
       date.onReset();
       content.onReset();
       price.onReset();
     }
     setModal(false);
+    setDetailMode(false);
+    setShowInput(false);
   };
 
   // 추가 시 사용자별 입력한 데이터를 저장
   const handleContentAdd = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (type && date.data && content.data && price.data) {
-      await addDoc(collection(db, `user/${userId}/user-diary`), {
-        date: `${date.data} ${currentTime}`,
-        type: type,
-        content: content.data,
-        price: price.data,
-      });
+
+    const userAddData = {
+      date: `${date.data} ${currentTime}`,
+      type: type,
+      detailType: detailType,
+      content: content.data,
+      price: price.data,
+    };
+
+    if (type === '지출') {
+      userAddData.detailType = detailType;
+      if (detailType === '기타') {
+        userAddData.content = content.data;
+      } else if (detailType) {
+        userAddData.content = detailType;
+      }
+    }
+
+    if ((type && date.data && content.data && price.data) || detailType) {
+      await addDoc(collection(db, `user/${userId}/user-diary`), userAddData);
       alert('내역이 추가되었습니다.');
       handleModalClose();
     } else {
@@ -53,7 +79,7 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
   return (
     <div>
       {modal && <div className="absolute inset-0 bg-black bg-opacity-30"></div>}
-      <div className={`modalStyle ${modal && 'bottom-0'} `}>
+      <div className={`modalStyle ${modal && 'bottom-0'}`}>
         <form className="flex flex-col gap-6">
           <div>
             <label htmlFor="date" className="modalTypeName">
@@ -68,10 +94,13 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
             />
           </div>
           <div className="flex flex-col">
-            <label htmlFor="content" className="modalTypeName">
-              내용
-            </label>
-            <div className="flex gap-4 mt-1 mb-3">
+            <div className="flex items-center">
+              <label htmlFor="content" className="modalTypeName">
+                내용
+              </label>
+              {detailMode && <p className="text-[12px] text-red-400">(세부내역 선택)</p>}
+            </div>
+            <div className="flex gap-4 mt-1">
               {['수입', '지출'].map((item) => (
                 <button
                   key={item}
@@ -83,19 +112,35 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
                 </button>
               ))}
             </div>
-            <input
-              type="text"
-              id="content"
-              className="modalInput"
-              placeholder="내용을 적어주세요.(최대 12자)"
-              maxLength={12}
-              value={content.data}
-              onChange={(e) => content.onChange(e, 'content')}
-              required
-            />
+            {detailMode && (
+              <div className="flex gap-2 my-3">
+                {['식당', '간식', '술', '쇼핑', '기타'].map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    className={`modalButton ${item === detailType && 'bg-indigo-500 text-white'}`}
+                    onClick={handleDetail}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            )}
+            {(!detailMode || showInput) && (
+              <input
+                type="text"
+                id="content"
+                className={`modalInput ${!detailMode && 'mt-3'}`}
+                placeholder="내용을 적어주세요.(최대 12자)"
+                maxLength={12}
+                value={content.data}
+                onChange={(e) => content.onChange(e, 'content')}
+                required
+              />
+            )}
           </div>
           <div>
-            <div className="flex items-end">
+            <div className="flex items-center">
               <label htmlFor="price" className="modalTypeName">
                 금액
               </label>
