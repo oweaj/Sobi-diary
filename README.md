@@ -58,11 +58,13 @@
 ### 3) Chart
 
 - 수입 및 지출 내역들을 입력한 상태
+
   <img width="431" alt="스크린샷 2023-12-30 오전 12 56 53" src="https://github.com/oweaj/sobi-diary/assets/101049520/b8e05526-2b56-4f1c-9322-6e66c061f7a1">
 
 <br>
 
 - 입력한 데이터를 바탕으로 총 합산 내역과 지출 세부 내역의 비율을 차트로 시각화
+
   <img width="431" alt="스크린샷 2023-12-30 오전 12 57 10" src="https://github.com/oweaj/sobi-diary/assets/101049520/5da8bb4b-22c8-4fab-b9c7-5ff146d734db">
 
 ---
