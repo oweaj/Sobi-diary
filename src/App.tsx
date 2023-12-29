@@ -18,7 +18,6 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        navigate('main');
         setUser({ id: user.uid, name: user.displayName });
       } else {
         navigate('/');

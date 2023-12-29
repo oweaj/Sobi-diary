@@ -42,7 +42,7 @@ const Chart = ({ user }: userType) => {
       },
       title: {
         display: true,
-        text: '< 지출 세부 내역 분류 >',
+        text: '< 세부 지출 내역 분류 >',
         padding: { bottom: 16 },
         font: { size: 16 },
       },

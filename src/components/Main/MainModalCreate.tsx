@@ -98,7 +98,7 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
               <label htmlFor="content" className="modalTypeName">
                 내용
               </label>
-              {detailMode && <p className="text-[12px] text-red-400">(세부내역 선택)</p>}
+              {detailMode && <p className="text-[12px] text-red-400">(세부내역 선택 필수)</p>}
             </div>
             <div className="flex gap-4 mt-1">
               {['수입', '지출'].map((item) => (
