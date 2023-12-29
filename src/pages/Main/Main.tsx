@@ -2,10 +2,11 @@ import Header from '../../components/Header/Header';
 import MainTotal from '../../components/Main/MainTotal';
 import MainContent from '../../components/Main/MainContent';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { CiSquarePlus } from 'react-icons/ci';
 import MainModalCreate from '../../components/Main/MainModalCreate';
 import { FaRegChartBar } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import useGetDoc from '../../hooks/useGetDoc';
 
 interface userType {
   user: {
@@ -15,17 +16,33 @@ interface userType {
 }
 
 const Main = ({ user }: userType) => {
-  // const [user, setUser] = useState<userInfo | null>(null);
+  const naviate = useNavigate();
   const [modal, setModal] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
   const [btnId, setBtnId] = useState('전체');
+  const { docList } = useGetDoc(user?.id, btnId);
+
+  const handleGoChart = () => {
+    const sobiCheck = docList.filter((item) => item.detailType);
+    if (sobiCheck.length) {
+      naviate('/chart');
+    } else {
+      alert('소비 내역이 없으면 차트를 볼 수 없습니다.');
+    }
+  };
 
   const handleModalOpen = () => {
     setModal(true);
     setDeleteMode(false);
   };
 
-  const handleDelete = () => setDeleteMode(!deleteMode);
+  const handleDelete = () => {
+    if (docList.length) {
+      setDeleteMode(!deleteMode);
+    } else {
+      alert('내역이 있으면 삭제가 가능합니다.');
+    }
+  };
 
   return (
     <>
@@ -38,10 +55,10 @@ const Main = ({ user }: userType) => {
             님 <br /> 수입 및 지출 내역을 확인해보세요.
           </div>
           <div>
-            <Link to="/chart" className="flex items-center gap-1 mainButton">
+            <div className="flex items-center gap-1 mainButton" onClick={handleGoChart}>
               <FaRegChartBar />
               <span>소비 차트</span>
-            </Link>
+            </div>
           </div>
         </div>
         <MainTotal userId={user?.id} />
