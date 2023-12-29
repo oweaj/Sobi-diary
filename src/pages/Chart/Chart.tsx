@@ -1,9 +1,9 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Bar, Pie } from 'react-chartjs-2';
 import useGetDoc from '../../hooks/useGetDoc';
 import Header from '../../components/Header/Header';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, ArcElement, Tooltip, Legend);
 
 interface userType {
   user: {
@@ -14,45 +14,83 @@ interface userType {
 
 const Chart = ({ user }: userType) => {
   const { docList } = useGetDoc(user?.id, '전체');
+  const plusTotal = useGetDoc(user?.id, '수입').handleTotal();
+  const minusTotal = useGetDoc(user?.id, '지출').handleTotal();
 
-  const options = {
+  const totalOptions = {
     responsive: true,
+    aspectRatio: 1,
     plugins: {
       legend: {
         position: 'top' as const,
+        display: false,
       },
       title: {
         display: true,
-        text: `${user?.name}님 소비 내역`,
+        text: `< ${user?.name}님 수입 및 지출 내역 >`,
+        font: { size: 16 },
+        padding: { bottom: 20 },
       },
     },
   };
 
-  const types = ['수입', '지출'];
+  const detailOptions = {
+    plugins: {
+      legend: {
+        position: 'bottom' as const,
+        labels: { padding: 20 },
+      },
+      title: {
+        display: true,
+        text: '< 지출 세부 내역 분류 >',
+        padding: { bottom: 16 },
+        font: { size: 16 },
+      },
+    },
+  };
+
   const totalData = {
-    labels: types,
+    labels: ['수입', '지출'],
     datasets: [
       {
-        label: '분류 1', //그래프 분류되는 항목
-        data: [1, 2], //실제 그려지는 데이터(Y축 숫자)
-
-        backgroundColor: ['rgba(255, 0, 0, 0.3)', 'rgba(0, 160, 235, 0.2)'],
-        borderColor: ['rgba(255, 0, 0, 1)', 'rgba(0, 160, 235, 1)'],
-        borderWidth: 1,
+        data: [plusTotal, minusTotal],
+        backgroundColor: ['rgba(53, 162, 235, 0.5)', 'rgba(255, 99, 132, 0.5)'],
       },
     ],
   };
 
-  const items = ['식당', '간식', '술자리', '쇼핑', '기타'];
+  const chartData = (label: string) => {
+    const check = docList.filter((item) => item.detailType);
+    let calc = 0;
+    check.map((item) => {
+      if (label === item.detailType) {
+        const changPrice = item.price.replace(/[^\d]/g, '');
+        calc += Number(changPrice);
+      }
+    });
+    return calc;
+  };
+
   const detailDate = {
-    labels: items,
+    labels: ['식당', '간식', '술', '쇼핑', '기타'],
     datasets: [
       {
-        label: '분류 2', //그래프 분류되는 항목
-        data: [1, 2, 3], //실제 그려지는 데이터(Y축 숫자)
-
-        backgroundColor: ['rgba(255, 0, 0, 0.3)', 'rgba(0, 160, 235, 0.2)'],
-        borderColor: ['rgba(255, 0, 0, 1)', 'rgba(0, 160, 235, 1)'],
+        label: '지출',
+        data: [chartData('식당'), chartData('간식'), chartData('술'), chartData('쇼핑'), chartData('기타')],
+        backgroundColor: [
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(29, 148, 255, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+        ],
+        borderColor: [
+          'rgba(153, 102, 255, 1)',
+          'rgba(29, 148, 255, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 206, 86, 1)',
+        ],
         borderWidth: 1,
       },
     ],
@@ -62,9 +100,10 @@ const Chart = ({ user }: userType) => {
     <>
       <Header />
       <div className="h-[calc(100%-3.5rem)] flex flex-col items-center">
-        <div className="w-64 h-full flex flex-col justify-around">
-          <Doughnut options={options} data={totalData} />
-          <Doughnut options={options} data={detailDate} />
+        <p className="text-sm text-red-400 pt-4">※ 차트 그래프에 마우스를 올리면 금액을 알 수 있습니다.</p>
+        <div className="w-4/5 h-full flex flex-col justify-evenly 2xl:w-11/12 transition-all duration-300">
+          <Bar options={totalOptions} data={totalData} />
+          <Pie options={detailOptions} data={detailDate} />
         </div>
       </div>
     </>

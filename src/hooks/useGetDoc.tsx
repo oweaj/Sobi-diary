@@ -5,6 +5,7 @@ import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestor
 interface docType {
   date: string;
   type: string;
+  detailType: string;
   content: string;
   price: string;
   id: string;
