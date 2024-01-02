@@ -1,5 +1,4 @@
 import Header from '../../components/Header/Header';
-import MainTotal from '../../components/Main/MainTotal';
 import MainContent from '../../components/Main/MainContent';
 import { useState } from 'react';
 import { CiSquarePlus } from 'react-icons/ci';
@@ -20,6 +19,8 @@ const Main = ({ user }: userType) => {
   const [modal, setModal] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
   const [btnId, setBtnId] = useState('전체');
+  const plusTotal = useGetDoc(user?.id, '수입').handleTotal();
+  const minusTotal = useGetDoc(user?.id, '지출').handleTotal();
   const { docList } = useGetDoc(user?.id, btnId);
 
   const handleGoChart = () => {
@@ -44,6 +45,8 @@ const Main = ({ user }: userType) => {
     }
   };
 
+  console.log(11);
+
   return (
     <>
       <Header />
@@ -54,14 +57,26 @@ const Main = ({ user }: userType) => {
             <span className="text-lg font-semibold text-sky-500"> {user?.name ? user.name : '사용자'}</span>
             님 <br /> 수입 및 지출 내역을 확인해보세요.
           </div>
-          <div>
-            <div className="flex items-center gap-1 mainButton" onClick={handleGoChart}>
-              <FaRegChartBar />
-              <span>소비 차트</span>
-            </div>
+          <div className="flex items-center gap-1 mainButton" onClick={handleGoChart}>
+            <FaRegChartBar />
+            <span>소비 차트</span>
           </div>
         </div>
-        <MainTotal userId={user?.id} />
+        <div className="text-center border border-gray-400 rounded-xl py-4 bg-white">
+          <div className="text-xl font-medium pb-5">
+            총 <span className="text-2xl font-semibold">{(plusTotal + -minusTotal).toLocaleString()}</span>원
+          </div>
+          <div className="flex items-center justify-evenly">
+            {['수입', '지출'].map((item) => (
+              <div key={item} className={`flex-grow text-lg ${item === '수입' && 'border-r border-gray-400'}`}>
+                <p className="mb-1">{item}</p>
+                <p className={`font-medium ${item === '수입' ? 'text-sky-500' : 'text-red-400'}`}>
+                  {item === '수입' ? plusTotal.toLocaleString() : minusTotal.toLocaleString()}원
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
         <div className="flex items-center gap-3 border-b border-gray-400 pb-3">
           {['전체', '수입', '지출', '삭제'].map((item) => (
             <button
