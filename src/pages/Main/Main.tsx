@@ -45,8 +45,6 @@ const Main = ({ user }: userType) => {
     }
   };
 
-  console.log(11);
-
   return (
     <>
       <Header />
