@@ -1,4 +1,4 @@
-import { signInWithPopup, GoogleAuthProvider, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { FcGoogle } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,6 @@ const SignIn = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      setPersistence(auth, browserSessionPersistence); // 세션 인증 상태
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
       navigate('/main');
