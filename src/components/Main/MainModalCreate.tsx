@@ -3,14 +3,18 @@ import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../firebase';
 import useInput from '../../hooks/useInput';
 
+interface userType {
+  uid: string;
+  name: string;
+}
+
 interface modalState {
+  userData: userType;
   modal: boolean;
   setModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const MainModalCreate = ({ modal, setModal }: modalState) => {
-  const getUser = localStorage.getItem('user');
-  const userData = JSON.parse(getUser ?? 'null');
+const MainModalCreate = ({ userData, modal, setModal }: modalState) => {
   const [type, setType] = useState<string | null>(null);
   const [detailMode, setDetailMode] = useState(false);
   const [detailType, setDetailType] = useState<string | null>(null);
@@ -69,7 +73,7 @@ const MainModalCreate = ({ modal, setModal }: modalState) => {
     }
 
     if ((type && date.data && content.data && price.data) || detailType) {
-      await addDoc(collection(db, `user/${userData.uid}/user-diary`), userAddData);
+      await addDoc(collection(db, `user/${userData?.uid}/user-diary`), userAddData);
       alert('내역이 추가되었습니다.');
       handleModalClose();
     } else {

@@ -9,14 +9,14 @@ import useGetDoc from '../../hooks/useGetDoc';
 
 const Main = () => {
   const getUser = localStorage.getItem('user');
-  const userData = JSON.parse(getUser ?? 'null');
+  const userData = getUser ? JSON.parse(getUser) : null;
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
   const [btnId, setBtnId] = useState('전체');
-  const { docList } = useGetDoc(userData.uid, btnId);
-  const plusTotal = useGetDoc(userData.uid, '수입').handleTotal();
-  const minusTotal = useGetDoc(userData.uid, '지출').handleTotal();
+  const { docList } = useGetDoc(userData?.uid, btnId);
+  const plusTotal = useGetDoc(userData?.uid, '수입').handleTotal();
+  const minusTotal = useGetDoc(userData?.uid, '지출').handleTotal();
 
   const handleGoChart = () => {
     const sobiCheck = docList.filter((item) => item.detailType);
@@ -26,8 +26,6 @@ const Main = () => {
       alert('소비 내역이 없으면 차트를 볼 수 없습니다.');
     }
   };
-
-  console.log(1111);
 
   const handleModalOpen = () => {
     setModal(true);
@@ -49,7 +47,7 @@ const Main = () => {
         <div className="flex items-center justify-between pt-3">
           <div>
             <span className="text-lg">😎</span> 반갑습니다.
-            <span className="text-lg font-semibold text-sky-500"> {userData.name ?? '사용자'}</span>
+            <span className="text-lg font-semibold text-sky-500"> {userData?.name ?? '사용자'}</span>
             님 <br /> 수입 및 지출 내역을 확인해보세요.
           </div>
           <div className="flex items-center gap-1 mainButton" onClick={handleGoChart}>
@@ -85,14 +83,14 @@ const Main = () => {
             </button>
           ))}
         </div>
-        <MainContent deleteMode={deleteMode} setDeleteMode={setDeleteMode} btnId={btnId} />
+        <MainContent userData={userData} deleteMode={deleteMode} setDeleteMode={setDeleteMode} btnId={btnId} />
       </div>
       <div className="flex absolute left-1/2 -translate-x-1/2 bottom-0">
         <button type="button" className="text-gray-800 hover:text-green-500 transition-all" onClick={handleModalOpen}>
           <CiSquarePlus className="w-12 h-12" />
         </button>
       </div>
-      <MainModalCreate modal={modal} setModal={setModal} />
+      <MainModalCreate userData={userData} modal={modal} setModal={setModal} />
     </>
   );
 };

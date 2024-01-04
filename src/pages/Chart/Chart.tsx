@@ -7,10 +7,10 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, ArcElement, Tool
 
 const Chart = () => {
   const getUser = localStorage.getItem('user');
-  const userData = JSON.parse(getUser ?? 'null');
-  const { docList } = useGetDoc(userData.uid, '전체');
-  const plusTotal = useGetDoc(userData.uid, '수입').handleTotal();
-  const minusTotal = useGetDoc(userData.uid, '지출').handleTotal();
+  const userData = getUser ? JSON.parse(getUser) : null;
+  const { docList } = useGetDoc(userData?.uid, '전체');
+  const plusTotal = useGetDoc(userData?.uid, '수입').handleTotal();
+  const minusTotal = useGetDoc(userData?.uid, '지출').handleTotal();
 
   const totalOptions = {
     responsive: true,
@@ -22,7 +22,7 @@ const Chart = () => {
       },
       title: {
         display: true,
-        text: `< ${userData.name}님 수입 및 지출 내역 >`,
+        text: `< ${userData?.name}님 수입 및 지출 내역 >`,
         font: { size: 16 },
         padding: { bottom: 20 },
       },
