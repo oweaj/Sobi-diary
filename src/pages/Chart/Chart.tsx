@@ -5,17 +5,12 @@ import Header from '../../components/Header/Header';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, ArcElement, Tooltip, Legend);
 
-interface userType {
-  user: {
-    id: string;
-    name: string | null;
-  } | null;
-}
-
-const Chart = ({ user }: userType) => {
-  const { docList } = useGetDoc(user?.id, '전체');
-  const plusTotal = useGetDoc(user?.id, '수입').handleTotal();
-  const minusTotal = useGetDoc(user?.id, '지출').handleTotal();
+const Chart = () => {
+  const getUser = localStorage.getItem('user');
+  const userData = JSON.parse(getUser ?? 'null');
+  const { docList } = useGetDoc(userData.uid, '전체');
+  const plusTotal = useGetDoc(userData.uid, '수입').handleTotal();
+  const minusTotal = useGetDoc(userData.uid, '지출').handleTotal();
 
   const totalOptions = {
     responsive: true,
@@ -27,7 +22,7 @@ const Chart = ({ user }: userType) => {
       },
       title: {
         display: true,
-        text: `< ${user?.name}님 수입 및 지출 내역 >`,
+        text: `< ${userData.name}님 수입 및 지출 내역 >`,
         font: { size: 16 },
         padding: { bottom: 20 },
       },

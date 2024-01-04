@@ -6,19 +6,20 @@ import { BsTrash } from 'react-icons/bs';
 import useGetDoc from '../../hooks/useGetDoc';
 
 interface userIdType {
-  userId: string | undefined;
   deleteMode: boolean;
   setDeleteMode: Dispatch<SetStateAction<boolean>>;
   btnId: string | null;
 }
 
-const MainContent = ({ userId, deleteMode, setDeleteMode, btnId }: userIdType) => {
-  const { docList } = useGetDoc(userId, btnId); // 현재 사용자 데이터 가져오기
+const MainContent = ({ deleteMode, setDeleteMode, btnId }: userIdType) => {
+  const getUser = localStorage.getItem('user');
+  const userData = JSON.parse(getUser ?? 'null');
+  const { docList } = useGetDoc(userData.uid, btnId); // 현재 사용자 데이터 가져오기
 
   // 데이터 삭제 하기
   const handleCheck = (id: string) => {
     const deleteCheck = window.confirm('내역을 삭제하시겠습니까?');
-    const userDiary = `user/${userId}/user-diary`;
+    const userDiary = `user/${userData.uid}/user-diary`;
     if (deleteCheck) {
       deleteDoc(doc(db, userDiary, id));
       setDeleteMode(false);

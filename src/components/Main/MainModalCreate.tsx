@@ -6,10 +6,11 @@ import useInput from '../../hooks/useInput';
 interface modalState {
   modal: boolean;
   setModal: Dispatch<SetStateAction<boolean>>;
-  userId: string | undefined;
 }
 
-const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
+const MainModalCreate = ({ modal, setModal }: modalState) => {
+  const getUser = localStorage.getItem('user');
+  const userData = JSON.parse(getUser ?? 'null');
   const [type, setType] = useState<string | null>(null);
   const [detailMode, setDetailMode] = useState(false);
   const [detailType, setDetailType] = useState<string | null>(null);
@@ -68,7 +69,7 @@ const MainModalCreate = ({ modal, setModal, userId }: modalState) => {
     }
 
     if ((type && date.data && content.data && price.data) || detailType) {
-      await addDoc(collection(db, `user/${userId}/user-diary`), userAddData);
+      await addDoc(collection(db, `user/${userData.uid}/user-diary`), userAddData);
       alert('내역이 추가되었습니다.');
       handleModalClose();
     } else {

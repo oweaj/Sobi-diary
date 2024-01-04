@@ -12,6 +12,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      localStorage.removeItem('user');
       navigate('/');
       alert('로그아웃 되었습니다.');
     } catch (error) {

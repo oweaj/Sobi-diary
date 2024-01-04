@@ -11,11 +11,11 @@ interface docType {
   id: string;
 }
 
-const useGetDoc = (userId: string | undefined, type: string | null) => {
+const useGetDoc = (uid: string, type: string | null) => {
   const [docList, setDocList] = useState<docType[]>([]);
 
   useEffect(() => {
-    const userDiary = `user/${userId}/user-diary`;
+    const userDiary = `user/${uid}/user-diary`;
 
     // 내역 button 필터링
     if (type === '수입' || type === '지출') {
@@ -32,7 +32,7 @@ const useGetDoc = (userId: string | undefined, type: string | null) => {
         setDocList(productArr);
       });
     }
-  }, [userId, type]);
+  }, [uid, type]);
 
   // 내역별 총 계산
   const handleTotal = () => {
