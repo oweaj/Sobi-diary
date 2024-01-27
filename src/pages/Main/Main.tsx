@@ -43,7 +43,7 @@ const Main = () => {
   return (
     <>
       <Header />
-      <div className="flex h-full flex-col gap-3 px-3">
+      <div className="flex flex-col h-full gap-3 px-3">
         <div className="flex items-center justify-between pt-3">
           <div>
             <span className="text-lg">😎</span> 반갑습니다.
@@ -55,8 +55,8 @@ const Main = () => {
             <span>소비 차트</span>
           </div>
         </div>
-        <div className="text-center border border-gray-400 rounded-xl py-4 bg-white">
-          <div className="text-xl font-medium pb-5">
+        <div className="py-4 text-center bg-white border border-gray-400 rounded-xl">
+          <div className="pb-5 text-xl font-medium">
             총 <span className="text-2xl font-semibold">{(plusTotal + -minusTotal).toLocaleString()}</span>원
           </div>
           <div className="flex items-center justify-evenly">
@@ -70,7 +70,7 @@ const Main = () => {
             ))}
           </div>
         </div>
-        <div className="flex items-center gap-3 border-b border-gray-400 pb-3">
+        <div className="flex items-center gap-3 pb-3 border-b border-gray-400">
           {['전체', '수입', '지출', '삭제'].map((item) => (
             <button
               key={item}
@@ -85,8 +85,8 @@ const Main = () => {
         </div>
         <MainContent userData={userData} deleteMode={deleteMode} setDeleteMode={setDeleteMode} btnId={btnId} />
       </div>
-      <div className="flex absolute left-1/2 -translate-x-1/2 bottom-0">
-        <button type="button" className="text-gray-800 hover:text-green-500 transition-all" onClick={handleModalOpen}>
+      <div className="absolute bottom-0 flex -translate-x-1/2 left-1/2">
+        <button type="button" className="text-gray-800 transition-all hover:text-green-500" onClick={handleModalOpen}>
           <CiSquarePlus className="w-12 h-12" />
         </button>
       </div>

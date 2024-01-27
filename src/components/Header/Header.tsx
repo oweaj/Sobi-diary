@@ -23,12 +23,12 @@ const Header = () => {
   return (
     <div className="flex items-center justify-center p-2 border-b border-gray-300">
       {headerTitle === 'chart' && (
-        <button type="button" className="absolute left-1 p-1" onClick={() => navigate(-1)}>
+        <button type="button" className="absolute p-1 left-1" onClick={() => navigate(-1)}>
           <IoIosArrowBack className="w-6 h-6" />
         </button>
       )}
       <h1 className="text-[26px] font-bold">{headerTitle === 'chart' ? 'Chart' : '씀.'}</h1>
-      <button type="button" className="absolute right-3 p-1" onClick={handleLogout}>
+      <button type="button" className="absolute p-1 right-3" onClick={handleLogout}>
         <FiLogOut className="w-6 h-6" />
       </button>
     </div>

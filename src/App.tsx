@@ -21,7 +21,7 @@ function App() {
   }, []);
 
   return (
-    <div className="fixed w-[25rem] h-full left-1/2 -translate-x-1/2 border border-gray-400 rounded-2xl shadow-xl overflow-hidden">
+    <div className="fixed w-[25rem] h-full left-1/2 -translate-x-1/2 border border-gray-400 rounded-2xl shadow-xl">
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/main" element={<Main />} />

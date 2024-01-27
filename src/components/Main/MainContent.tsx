@@ -33,7 +33,7 @@ const MainContent = ({ userData, deleteMode, setDeleteMode, btnId }: userIdType)
   return (
     <div className="h-[calc(100%-25rem)]">
       {docList.length ? (
-        <ul className="h-full flex flex-col gap-3 overflow-y-auto overflow-x-hidden">
+        <ul className="flex flex-col h-full gap-3 overflow-x-hidden overflow-y-auto">
           {docList.map(({ id, date, type, content, price }) => (
             <li key={id} className="contentList">
               <div className="flex flex-col">
@@ -58,7 +58,7 @@ const MainContent = ({ userData, deleteMode, setDeleteMode, btnId }: userIdType)
           ))}
         </ul>
       ) : (
-        <div className="h-full flex flex-col items-center justify-center gap-1 text-lg text-gray-800">
+        <div className="flex flex-col items-center justify-center h-full gap-1 text-lg text-gray-800">
           <MdOutlineContentPasteSearch className="w-16 h-16" />
           <p>내역이 없습니다.</p>
           <p>하단 버튼을 통해 내역을 추가해 보세요.</p>

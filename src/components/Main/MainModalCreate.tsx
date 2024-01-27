@@ -93,7 +93,7 @@ const MainModalCreate = ({ userData, modal, setModal }: modalState) => {
             <input
               type="date"
               id="date"
-              className="relative modalInput mt-1 text-lg"
+              className="relative mt-1 text-lg modalInput"
               value={date.data}
               onChange={(e) => date.onChange(e, 'date')}
             />
@@ -154,7 +154,7 @@ const MainModalCreate = ({ userData, modal, setModal }: modalState) => {
             <input
               type="text"
               id="price"
-              className="modalInput mt-1"
+              className="mt-1 modalInput"
               placeholder="금액을 적어주세요."
               value={price.data}
               onChange={(e) => price.onChange(e, 'price')}
@@ -162,7 +162,7 @@ const MainModalCreate = ({ userData, modal, setModal }: modalState) => {
               required
             />
           </div>
-          <div className="absolute w-full left-1/2 -translate-x-1/2 bottom-4 flex gap-4 px-4 font-medium">
+          <div className="absolute flex w-full gap-4 px-4 font-medium -translate-x-1/2 left-1/2 bottom-4">
             {['닫기', '추가하기'].map((item) => (
               <button
                 key={item}

@@ -95,8 +95,8 @@ const Chart = () => {
     <>
       <Header />
       <div className="h-[calc(100%-3.5rem)] flex flex-col items-center">
-        <p className="text-sm text-red-400 pt-4">※ 차트 그래프에 마우스를 올리면 금액을 알 수 있습니다.</p>
-        <div className="w-4/5 h-full flex flex-col justify-evenly 2xl:w-11/12 transition-all duration-300">
+        <p className="pt-4 text-sm text-red-400">※ 차트 그래프에 마우스를 올리면 금액을 알 수 있습니다.</p>
+        <div className="flex flex-col w-4/5 h-full transition-all duration-300 justify-evenly 2xl:w-11/12">
           <Bar options={totalOptions} data={totalData} />
           <Pie options={detailOptions} data={detailDate} />
         </div>

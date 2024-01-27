@@ -20,7 +20,7 @@ const SignIn = () => {
     <div className="absolute center">
       <img src="/logo.png" className="my-8" alt="씀 로고 이미지" />
       <button
-        className="w-full flex items-center justify-center gap-2 font-semibold border rounded-md shadow-md py-1"
+        className="flex items-center justify-center w-full gap-2 py-1 font-semibold border rounded-md shadow-md"
         onClick={handleGoogleLogin}
       >
         <FcGoogle className="w-10 h-10" />
