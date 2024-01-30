@@ -89,3 +89,9 @@ $ npm run dev
 - 위에서 예시로 입력한 user-diary 컬렉션의 저장된 문서 중 하나
 
 <img width="234" alt="스크린샷 2023-12-30 오전 1 04 41" src="https://github.com/oweaj/sobi-diary/assets/101049520/25939565-f1ce-485d-ad5b-962b1b13ce69">
+
+---
+
+### Update
+
+- 자동 배포화 hosting 설정
