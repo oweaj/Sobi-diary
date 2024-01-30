@@ -27,7 +27,7 @@ const Header = () => {
           <IoIosArrowBack className="w-6 h-6" />
         </button>
       )}
-      <h1 className="text-[26px] font-bold">{headerTitle === 'chart' ? 'Chart' : '.'}</h1>
+      <h1 className="text-[26px] font-bold">{headerTitle === 'chart' ? 'Chart' : '씀.'}</h1>
       <button type="button" className="absolute p-1 right-3" onClick={handleLogout}>
         <FiLogOut className="w-6 h-6" />
       </button>
