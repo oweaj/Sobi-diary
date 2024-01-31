@@ -94,4 +94,4 @@ $ npm run dev
 
 ### Update
 
-- 자동 배포화 hosting 설정
+- [자동 배포화 hosting 설정](https://velog.io/@oweaj/Firebase-deploy)
