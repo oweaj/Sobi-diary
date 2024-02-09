@@ -16,9 +16,11 @@ interface modalState {
 
 const MainModalCreate = ({ userData, modal, setModal }: modalState) => {
   const [type, setType] = useState<string | null>(null);
-  const [detailMode, setDetailMode] = useState(false);
   const [detailType, setDetailType] = useState<string | null>(null);
-  const [showInput, setShowInput] = useState(false);
+  const [active, setActive] = useState({
+    detailMode: false,
+    showInput: false,
+  });
   const today = new Date();
   const currentTime = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
   const date = useInput();
@@ -27,13 +29,21 @@ const MainModalCreate = ({ userData, modal, setModal }: modalState) => {
 
   const handleType = (e: MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;
-    target.textContent === '지출' ? setDetailMode(true) : setDetailMode(false);
+    if (target.textContent === '지출') {
+      setActive((prev) => ({ ...prev, detailMode: true }));
+    } else {
+      setActive((prev) => ({ ...prev, showInput: false }));
+    }
     setType(target.textContent);
   };
 
   const handleDetail = (e: MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;
-    target.textContent === '기타' ? setShowInput(true) : setShowInput(false);
+    if (target.textContent === '기타') {
+      setActive((prev) => ({ ...prev, showInput: true }));
+    } else {
+      setActive((prev) => ({ ...prev, showInput: false }));
+    }
     setDetailType(target.textContent);
   };
 
@@ -47,8 +57,7 @@ const MainModalCreate = ({ userData, modal, setModal }: modalState) => {
       price.onReset();
     }
     setModal(false);
-    setDetailMode(false);
-    setShowInput(false);
+    setActive(() => ({ detailMode: false, showInput: false }));
   };
 
   // 추가 시 사용자별 입력한 데이터를 저장
@@ -103,7 +112,7 @@ const MainModalCreate = ({ userData, modal, setModal }: modalState) => {
               <label htmlFor="content" className="modalTypeName">
                 내용
               </label>
-              {detailMode && <p className="text-[12px] text-red-400">(세부내역 선택 필수)</p>}
+              {active.detailMode && <p className="text-[12px] text-red-400">(세부내역 선택 필수)</p>}
             </div>
             <div className="flex gap-4 mt-1">
               {['수입', '지출'].map((item) => (
@@ -117,7 +126,7 @@ const MainModalCreate = ({ userData, modal, setModal }: modalState) => {
                 </button>
               ))}
             </div>
-            {detailMode && (
+            {active.detailMode && (
               <div className="flex gap-2 my-3">
                 {['식당', '간식', '술', '쇼핑', '기타'].map((item) => (
                   <button
@@ -131,11 +140,11 @@ const MainModalCreate = ({ userData, modal, setModal }: modalState) => {
                 ))}
               </div>
             )}
-            {(!detailMode || showInput) && (
+            {(!active.detailMode || active.showInput) && (
               <input
                 type="text"
                 id="content"
-                className={`modalInput ${!detailMode && 'mt-3'}`}
+                className={`modalInput ${!active.detailMode && 'mt-3'}`}
                 placeholder="내용을 적어주세요.(최대 12자)"
                 maxLength={12}
                 value={content.data}
