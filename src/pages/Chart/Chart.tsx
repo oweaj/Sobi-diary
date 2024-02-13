@@ -9,8 +9,8 @@ const Chart = () => {
   const getUser = localStorage.getItem('user');
   const userData = getUser ? JSON.parse(getUser) : null;
   const { docList } = useGetDoc(userData?.uid, '전체');
-  const plusTotal = useGetDoc(userData?.uid, '수입').handleTotal();
-  const minusTotal = useGetDoc(userData?.uid, '지출').handleTotal();
+  const plusTotal = useGetDoc(userData?.uid, '수입').total;
+  const minusTotal = useGetDoc(userData?.uid, '지출').total;
 
   const totalOptions = {
     responsive: true,

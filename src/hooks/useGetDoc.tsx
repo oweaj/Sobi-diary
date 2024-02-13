@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { db } from '../firebase';
 import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 
@@ -35,15 +35,11 @@ const useGetDoc = (uid: string, type: string | null) => {
   }, [uid, type]);
 
   // 내역별 총 계산
-  const handleTotal = () => {
-    const typeCheck = docList.filter((item) => item.type === type);
-    const onlyNumberPrice = typeCheck.map((item) => item.price.replace(/[^\d]/g, ''));
-    const calc = onlyNumberPrice.reduce((acc, el) => acc + Number(el), 0);
+  const typeCheck = useMemo(() => docList.filter((item) => item.type === type), [docList]);
+  const onlyNumberPrice = useMemo(() => typeCheck.map((item) => item.price.replace(/[^\d]/g, '')), [typeCheck]);
+  const total = useMemo(() => onlyNumberPrice.reduce((acc, el) => acc + Number(el), 0), [onlyNumberPrice]);
 
-    return calc;
-  };
-
-  return { docList, handleTotal };
+  return { docList, total };
 };
 
 export default useGetDoc;

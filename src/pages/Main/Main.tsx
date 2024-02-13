@@ -15,8 +15,8 @@ const Main = () => {
   const [deleteMode, setDeleteMode] = useState(false);
   const [btnId, setBtnId] = useState('전체');
   const { docList } = useGetDoc(userData?.uid, btnId);
-  const plusTotal = useGetDoc(userData?.uid, '수입').handleTotal();
-  const minusTotal = useGetDoc(userData?.uid, '지출').handleTotal();
+  const plusTotal = useGetDoc(userData?.uid, '수입').total;
+  const minusTotal = useGetDoc(userData?.uid, '지출').total;
 
   const handleGoChart = () => {
     const sobiCheck = docList.filter((item) => item.detailType);
