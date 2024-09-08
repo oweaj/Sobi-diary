@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
-import { db } from '../firebase';
-import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { useEffect, useMemo, useState } from "react";
+import { db } from "../firebase";
+import { collection, onSnapshot, orderBy, query, Unsubscribe, where } from "firebase/firestore";
 
 interface docType {
   date: string;
@@ -16,27 +16,34 @@ const useGetDoc = (uid: string, type: string | null) => {
 
   useEffect(() => {
     const userDiary = `user/${uid}/user-diary`;
+    let unsubscribe: Unsubscribe;
 
     // 내역 button 필터링
-    if (type === '수입' || type === '지출') {
-      const queryCheck = query(collection(db, userDiary), where('type', '==', type), orderBy('date', 'desc'));
-      onSnapshot(queryCheck, (snapShot) => {
+    if (type === "수입" || type === "지출") {
+      const queryCheck = query(collection(db, userDiary), where("type", "==", type), orderBy("date", "desc"));
+      unsubscribe = onSnapshot(queryCheck, (snapShot) => {
         const productArr = snapShot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as docType));
         setDocList(productArr);
       });
     } else {
       // 전체 내역 필터링
-      const queryCheck = query(collection(db, userDiary), orderBy('date', 'desc'));
-      onSnapshot(queryCheck, (snapShot) => {
+      const queryCheck = query(collection(db, userDiary), orderBy("date", "desc"));
+      unsubscribe = onSnapshot(queryCheck, (snapShot) => {
         const productArr = snapShot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as docType));
         setDocList(productArr);
       });
     }
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, [uid, type]);
 
   // 내역별 총 계산
   const typeCheck = useMemo(() => docList.filter((item) => item.type === type), [docList]);
-  const onlyNumberPrice = useMemo(() => typeCheck.map((item) => item.price.replace(/[^\d]/g, '')), [typeCheck]);
+  const onlyNumberPrice = useMemo(() => typeCheck.map((item) => item.price.replace(/[^\d]/g, "")), [typeCheck]);
   const total = useMemo(() => onlyNumberPrice.reduce((acc, el) => acc + Number(el), 0), [onlyNumberPrice]);
 
   return { docList, total };
