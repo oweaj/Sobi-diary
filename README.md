@@ -95,3 +95,4 @@ $ npm run dev
 ### Update
 
 - [자동 배포화 hosting 설정](https://velog.io/@oweaj/Firebase-deploy)
+- [수입 및 지출 데이터 추가 후 데이터 type별 list 갱신 수정](https://github.com/oweaj/Sobi-diary/blob/main/src/hooks/useGetDoc.tsx)
